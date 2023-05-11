@@ -15,21 +15,21 @@ pipeline {
         stage('terraform apply') {
             steps {
                 sh 'terraform apply -auto-approve'
-                sh 'terraform output kubeconfig > ./kubeconfig'
+                sh 'terraform output kubeconfig > ./kubeconfig.yaml'
                 sh 'terraform output config_map_aws_auth > ./config_map_aws_auth.yaml'
-                sh 'export KUBECONFIG=./kubeconfig'
+                sh 'export KUBECONFIG=./kubeconfig.yaml'
             }
         }
         stage('add worker nodes') {
             steps {
-                sh 'kubectl apply -f ./config_map_aws_auth.yaml --kubeconfig=./kubeconfig'
+                sh 'kubectl apply -f ./config_map_aws_auth.yaml --kubeconfig=./kubeconfig.yaml'
                 sh 'sleep 60'
             }
         }
         stage('deploy example application') {
             steps {    
-                sh 'kubectl apply -f ./example/hello-kubernetes.yml --kubeconfig=./kubeconfig'
-                sh 'kubectl get all --kubeconfig=./kubeconfig'
+                sh 'kubectl apply -f ./example/hello-kubernetes.yml --kubeconfig=./kubeconfig.yaml'
+                sh 'kubectl get all --kubeconfig=./kubeconfig.yaml'
             }
         }
         stage('Run terraform destroy') {
@@ -39,7 +39,7 @@ pipeline {
         }
         stage('terraform destroy') {
             steps {
-                sh 'kubectl delete -f ./example/hello-kubernetes.yml --kubeconfig=./kubeconfig'
+                sh 'kubectl delete -f ./example/hello-kubernetes.yml --kubeconfig=./kubeconfig.yaml'
                 sh 'sleep 60'
                 sh 'terraform destroy -force'
             }
