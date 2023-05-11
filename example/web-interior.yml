@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-interior
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-interior
+  template:
+    metadata:
+      labels:
+        app: web-interior
+    spec:
+      containers:
+      - name: web-interior
+        image: learndevops083/interior:latest
+        ports:
+          - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-interior
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: web-interior
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: web-interior-ingress
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/success-codes: "200,404"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: web-interior
+          servicePort: 80

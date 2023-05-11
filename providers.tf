@@ -1,12 +1,12 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "us-east-1"
 }
 
 terraform {
   backend "s3" {
-    bucket = "techbloc-terraform-data"
-    key    = "openshift-311"
-    region = "eu-west-1"
+    bucket = "learndenops-demo-bucket"
+   # key    = "openshift-311"
+    region = "us-east-1"
   }
 }
 
