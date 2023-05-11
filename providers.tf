@@ -5,7 +5,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "learndenops-demo-bucket"
-   # key    = "openshift-311"
+    key   = "remote.tfstate"
     region = "us-east-1"
   }
 }
