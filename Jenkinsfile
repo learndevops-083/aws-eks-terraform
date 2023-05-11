@@ -22,7 +22,7 @@ pipeline {
         }
         stage('add worker nodes') {
             steps {
-                sh 'kubectl apply -f ./config_map_aws_auth.yaml --kubeconfig=./kubeconfig.yaml'
+                sh 'kubectl apply -f ./config_map_aws_auth.yaml '
                 sh 'sleep 60'
             }
         }
