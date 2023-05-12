@@ -17,7 +17,7 @@ CONFIGMAPAWSAUTH
 
   kubeconfig = <<KUBECONFIG
 
-apiVersion: v1
+apiVersion: 
 clusters:
  - cluster:
     server: ${aws_eks_cluster.eks.endpoint}
